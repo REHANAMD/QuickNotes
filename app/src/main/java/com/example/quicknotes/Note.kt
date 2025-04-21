@@ -5,5 +5,6 @@ data class Note(
     val content: String? = null,
     val timestamp: Long? = null,
     var checked: Boolean = false,
-    var reminderTime: Long? = null
+    var reminderTime: Long? = null,
+    val reminderTimestamp: Long? = null 
 )
