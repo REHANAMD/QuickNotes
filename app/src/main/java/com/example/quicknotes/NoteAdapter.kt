@@ -37,18 +37,18 @@ class NoteAdapter(private val notes: List<Note>, private val context: Context) :
         val timeFormatted = sdf.format(Date(note.timestamp ?: 0))
         holder.noteTime.text = timeFormatted
 
-        // ✅ Checkbox state
+        //  Checkbox state
         holder.checkNote.setOnCheckedChangeListener(null) // prevent previous listener firing
         holder.checkNote.isChecked = note.checked
 
-        // ✅ Strike-through based on checkbox
+        //  Strike-through based on checkbox
         if (note.checked) {
             holder.noteText.paintFlags = holder.noteText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
             holder.noteText.paintFlags = holder.noteText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
-        // ✅ Update checked state in Firebase
+        // Update checked state in Firebase
         holder.checkNote.setOnCheckedChangeListener { _, isChecked ->
             note.checked = isChecked
             FirebaseDatabase.getInstance()
@@ -57,7 +57,7 @@ class NoteAdapter(private val notes: List<Note>, private val context: Context) :
                 .child("checked")
                 .setValue(isChecked)
 
-            // 🔁 Update UI immediately
+            //  Update UI immediately
             if (isChecked) {
                 holder.noteText.paintFlags = holder.noteText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             } else {
@@ -65,7 +65,7 @@ class NoteAdapter(private val notes: List<Note>, private val context: Context) :
             }
         }
 
-        // ✅ Long press to delete
+        //  Long press to delete
         holder.itemView.setOnLongClickListener {
             AlertDialog.Builder(context).apply {
                 setTitle("Delete Note")
