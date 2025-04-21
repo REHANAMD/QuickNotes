@@ -24,7 +24,7 @@ class NoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        // 🔐 Block unauthenticated users
+        //  Block unauthenticated users
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -32,7 +32,7 @@ class NoteActivity : AppCompatActivity() {
             return
         }
 
-        // 🌙 Apply dark mode before layout
+        //  Apply dark mode before layout
         val sharedPref = getSharedPreferences("settings", MODE_PRIVATE)
         val isDarkMode = sharedPref.getBoolean("dark_mode", false)
         AppCompatDelegate.setDefaultNightMode(
@@ -43,7 +43,7 @@ class NoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note)
 
-        // 🔗 UI references
+        // UI references
         val switchDarkMode = findViewById<Switch>(R.id.switchDarkMode)
         val switchReminder = findViewById<Switch>(R.id.switchReminder)
         val editNote = findViewById<EditText>(R.id.editNote)
@@ -51,7 +51,7 @@ class NoteActivity : AppCompatActivity() {
         val btnLogout = findViewById<Button>(R.id.btnLogout)
         val recyclerView = findViewById<RecyclerView>(R.id.notesRecycler)
 
-        // 🌙 Dark mode logic
+        //  Dark mode logic
         switchDarkMode.isChecked = isDarkMode
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             sharedPref.edit().putBoolean("dark_mode", isChecked).apply()
@@ -62,7 +62,7 @@ class NoteActivity : AppCompatActivity() {
             recreate()
         }
 
-        // ⏰ Reminder logic
+        // Reminder logic
         reminderSwitchListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val calendar = Calendar.getInstance()
@@ -81,14 +81,14 @@ class NoteActivity : AppCompatActivity() {
 
         switchReminder.setOnCheckedChangeListener(reminderSwitchListener)
 
-        // 🔁 RecyclerView + Firebase
+        //  RecyclerView + Firebase
         notesRef = FirebaseDatabase.getInstance().getReference("notes")
         noteList = ArrayList()
         adapter = NoteAdapter(noteList, this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        // 💾 Save note
+        //  Save note
         btnSave.setOnClickListener {
             val noteText = editNote.text.toString()
             if (noteText.isNotEmpty()) {
@@ -101,13 +101,13 @@ class NoteActivity : AppCompatActivity() {
                         Toast.makeText(this, "Note saved!", Toast.LENGTH_SHORT).show()
                         editNote.text.clear()
 
-                        // ❌ Avoid accidental reminder cleared toast
+                        // Avoid accidental reminder cleared toast
                         switchReminder.setOnCheckedChangeListener(null)
                         switchReminder.isChecked = false
                         reminderTimestamp = null
                         switchReminder.setOnCheckedChangeListener(reminderSwitchListener)
 
-                        // 🔔 If reminder set, trigger alarm
+                        //  If reminder set, trigger alarm
                         if (note.reminderTimestamp != null) {
                             val intent = Intent(this, ReminderReceiver::class.java).apply {
                                 putExtra("noteText", noteText)
@@ -136,7 +136,7 @@ class NoteActivity : AppCompatActivity() {
             }
         }
 
-        // 🔁 Sync with Firebase
+        //  Sync with Firebase
         notesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 noteList.clear()
@@ -152,7 +152,7 @@ class NoteActivity : AppCompatActivity() {
             }
         })
 
-        // 🔓 Logout logic
+        //  Logout logic
         btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this, LoginActivity::class.java))
