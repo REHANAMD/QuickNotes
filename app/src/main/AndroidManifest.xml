@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 🔥 This line is missing -->
+    <!--  This line is missing -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +15,7 @@
         android:theme="@style/Theme.QuickNotes"
         tools:targetApi="31">
 
-        <!-- ✅ LoginActivity is the launcher screen -->
+        <!--  LoginActivity is the launcher screen -->
         <activity android:name=".LoginActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <!-- ✅ NoteActivity requires login -->
+        <!--  NoteActivity requires login -->
         <activity android:name=".NoteActivity" android:exported="true" />
         <receiver
             android:name=".ReminderReceiver"
